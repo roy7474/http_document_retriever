@@ -12,15 +12,22 @@ Enter the header values in each of the fields below and press "Submit"'''
 
 import socket
 
-mysock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-mysock.connect(('data.pr4e.org', 80))
-cmd = 'GET http://data.pr4e.org/romeo.txt HTTP/1.0\r\n\r\n'.encode()
-mysock.send(cmd)
+url = input('Enter the URL of the file: ')
 
-while True:
-    data = mysock.recv(512)
-    if len(data) < 1:
-        break
-    print(data.decode(),end='')
+try:
+    mysock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    mysock.connect(('data.pr4e.org', 80))
+    cmd = ('GET '+ url+ ' HTTP/1.0\r\n\r\n').encode()
+    mysock.send(cmd)
+    while True:
+        data = mysock.recv(512)
+        if len(data) < 1:
+            break
+        print(data.decode(),end='')
+    mysock.close()
 
-mysock.close()
+except:
+    print('There was a problem trying to open the URL that you provided. Please try again!')
+    exit()
+
+#mysock.close()
